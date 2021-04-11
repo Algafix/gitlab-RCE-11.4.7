@@ -23,7 +23,7 @@ python3 rce_script.py -u <username> -p <password> -g <url without port> -l <loca
 By default, the netcat with -e option shell is used.
 
 
-## Build in shells
+## Build-in shells
 
 Current build-in shells:
 
